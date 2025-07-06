@@ -1,0 +1,23 @@
+[
+  {
+    "id": "FF001",
+    "name": "Akun Free Fire Sultan",
+    "desc": "Rank Heroic, Skin Evo, Bundle Langka",
+    "price": 350000,
+    "img": "https://via.placeholder.com/300x200.png?text=FF+Sultan"
+  },
+  {
+    "id": "ML001",
+    "name": "Akun MLBB Legend",
+    "desc": "Skin Epic, Full Hero, WR 80%",
+    "price": 300000,
+    "img": "https://via.placeholder.com/300x200.png?text=MLBB+Legend"
+  },
+  {
+    "id": "FF002",
+    "name": "Akun FF Combo Pack",
+    "desc": "Skin Incubator, Emote Keren, Senjata Evo",
+    "price": 270000,
+    "img": "https://via.placeholder.com/300x200.png?text=FF+Combo"
+  }
+]

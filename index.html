@@ -1,0 +1,110 @@
+<!-- ARYASTORE - index.html (Home + Featured Products from JSON + Search + Mobile Menu) -->
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ARYASTORE - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900 text-white font-sans">
+    <header class="bg-gray-800 p-4 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-yellow-400">ARYASTORE</h1>
+        <button id="menu-toggle" class="sm:hidden text-yellow-400 text-2xl">
+          ☰
+        </button>
+        <nav id="main-menu" class="hidden sm:flex space-x-4">
+          <a href="index.html" class="hover:text-yellow-300">Home</a>
+          <a href="products.html" class="hover:text-yellow-300">Produk</a>
+        </nav>
+      </div>
+      <div id="mobile-menu" class="sm:hidden hidden mt-2 text-center space-y-2">
+        <a href="index.html" class="block hover:text-yellow-300">Home</a>
+        <a href="products.html" class="block hover:text-yellow-300">Produk</a>
+      </div>
+    </header>
+
+    <section class="py-10 text-center">
+      <h2 class="text-3xl font-bold text-yellow-400 mb-2">
+        Selamat Datang di ARYASTORE
+      </h2>
+      <p class="text-gray-300 max-w-xl mx-auto">
+        Tempat terbaik untuk mencari akun Free Fire dan Mobile Legends
+        berkualitas. Dijamin aman, murah, dan terpercaya!
+      </p>
+      <a
+        href="products.html"
+        class="mt-6 inline-block bg-yellow-500 text-black px-6 py-3 rounded-xl hover:bg-yellow-400 transition"
+        >Lihat Semua Produk</a
+      >
+    </section>
+
+    <section class="max-w-md mx-auto mb-8 px-4">
+      <input
+        id="searchBox"
+        type="text"
+        placeholder="Cari berdasarkan kode produk (contoh: FF001)"
+        class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 text-white"
+      />
+    </section>
+
+    <section
+      id="featured-products"
+      class="container mx-auto px-4 pb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+    >
+      <!-- Produk unggulan tampil di sini -->
+    </section>
+
+    <footer class="bg-gray-800 p-4 text-center text-sm text-gray-400">
+      &copy; 2025 ARYASTORE. All rights reserved.
+    </footer>
+
+    <script>
+      // Toggle menu mobile
+      document.getElementById("menu-toggle").addEventListener("click", () => {
+        const menu = document.getElementById("mobile-menu");
+        menu.classList.toggle("hidden");
+      });
+
+      // Tampilkan 3 produk + fitur search by code
+      fetch("products.json")
+        .then((res) => res.json())
+        .then((data) => {
+          const featuredContainer =
+            document.getElementById("featured-products");
+          const searchBox = document.getElementById("searchBox");
+          let currentProducts = data.slice(0, 3);
+
+          function render(products) {
+            featuredContainer.innerHTML = "";
+            products.forEach((p) => {
+              const card = document.createElement("div");
+              card.className =
+                "bg-gray-800 p-4 rounded-xl shadow hover:scale-105 transition";
+              card.innerHTML = `
+              <img src="${p.img}" class="rounded mb-4">
+              <h3 class="text-xl font-semibold">${p.name}</h3>
+              <p class="text-gray-400 text-sm">${p.desc}</p>
+              <p class="text-yellow-400 font-bold mt-2">Rp ${parseInt(
+                p.price
+              ).toLocaleString()}</p>
+              <a href="product-detail.html" class="block mt-3 bg-yellow-500 text-black py-2 rounded hover:bg-yellow-400 text-center">Lihat Detail</a>
+            `;
+              featuredContainer.appendChild(card);
+            });
+          }
+
+          render(currentProducts);
+
+          searchBox.addEventListener("input", (e) => {
+            const keyword = e.target.value.toLowerCase();
+            const filtered = data.filter((p) =>
+              p.id.toLowerCase().includes(keyword)
+            );
+            render(filtered.length ? filtered : currentProducts);
+          });
+        });
+    </script>
+  </body>
+</html>

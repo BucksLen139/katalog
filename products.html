@@ -1,0 +1,116 @@
+<!-- ARYASTORE - products.html (Halaman Katalog dengan Pagination + JSON) -->
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produk ARYASTORE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900 text-white font-sans">
+    <header class="bg-gray-800 p-4 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-yellow-400">ARYASTORE</h1>
+        <nav class="space-x-4">
+          <a href="index.html" class="hover:text-yellow-300">Home</a>
+          <a href="products.html" class="hover:text-yellow-300">Produk</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="py-10 text-center">
+      <h2 class="text-3xl font-bold text-yellow-400 mb-2">Katalog Akun Game</h2>
+      <p class="text-gray-300">
+        Pilih akun Free Fire atau Mobile Legends terbaik untuk push rank kamu!
+      </p>
+    </section>
+
+    <section
+      id="product-list"
+      class="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 pb-10"
+    >
+      <!-- Produk halaman pertama -->
+    </section>
+
+    <!-- Pagination -->
+    <div class="flex justify-center space-x-2 pb-10">
+      <button
+        id="prevBtn"
+        class="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600 disabled:opacity-50"
+        disabled
+      >
+        Prev
+      </button>
+      <button
+        id="nextBtn"
+        class="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
+      >
+        Next
+      </button>
+    </div>
+
+    <footer class="bg-gray-800 p-4 text-center text-sm text-gray-400">
+      &copy; 2025 ARYASTORE. All rights reserved.
+    </footer>
+
+    <script>
+      let currentPage = 1;
+      const productsPerPage = 6;
+      let allProducts = [];
+
+      function renderPage(page) {
+        const productList = document.getElementById("product-list");
+        productList.innerHTML = "";
+
+        const start = (page - 1) * productsPerPage;
+        const end = start + productsPerPage;
+        const productsToShow = allProducts.slice(start, end);
+
+        productsToShow.forEach((p) => {
+          const card = document.createElement("div");
+          card.className =
+            "bg-gray-800 p-4 rounded-xl shadow hover:scale-105 transition";
+          card.innerHTML = `
+          <img src="${p.img}" class="rounded mb-4">
+          <h3 class="text-xl font-semibold">${p.name}</h3>
+          <p class="text-gray-400 text-sm">${p.desc}</p>
+          <p class="text-yellow-400 font-bold mt-2">Rp ${parseInt(
+            p.price
+          ).toLocaleString()}</p>
+          <a href="product-detail.html" class="block mt-3 bg-yellow-500 text-black py-2 rounded hover:bg-yellow-400 text-center">Lihat Detail</a>
+        `;
+          productList.appendChild(card);
+        });
+
+        document.getElementById("prevBtn").disabled = page === 1;
+        document.getElementById("nextBtn").disabled = end >= allProducts.length;
+      }
+
+      document.getElementById("prevBtn").addEventListener("click", () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderPage(currentPage);
+        }
+      });
+
+      document.getElementById("nextBtn").addEventListener("click", () => {
+        if (currentPage * productsPerPage < allProducts.length) {
+          currentPage++;
+          renderPage(currentPage);
+        }
+      });
+
+      fetch("products.json")
+        .then((res) => res.json())
+        .then((data) => {
+          allProducts = data;
+          renderPage(currentPage);
+        })
+        .catch((err) => {
+          console.error("Gagal mengambil produk:", err);
+          document.getElementById("product-list").innerHTML =
+            '<p class="text-red-400">Gagal memuat data produk.</p>';
+        });
+    </script>
+  </body>
+</html>
